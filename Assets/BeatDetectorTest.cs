@@ -176,112 +176,112 @@ public class BeatDetectorTest
         }
 
         // Calculate BPM
-    //    List<int> T = new List<int>();
-    //    int i_prec = 0;
-    //    for (int i = 1; i < length / 1024; i++)
-    //    {
-    //        if ((energy_peak[i] == 1) && (energy_peak[i - 1] == 0))
-    //        {
-    //            int di = i - i_prec;
-    //            if (di > 5) 
-    //            {
-    //                T.Add(di);
-    //                i_prec = i;
-    //            }
-    //        }
-    //    }
+        List<int> T = new List<int>();
+        int i_prec = 0;
+        for (int i = 1; i < length / 1024; i++)
+        {
+            if ((energy_peak[i] == 1) && (energy_peak[i - 1] == 0))
+            {
+                int di = i - i_prec;
+                if (di > 5)
+                {
+                    T.Add(di);
+                    i_prec = i;
+                }
+            }
+        }
 
-    //    int T_occ_max = 0;
-    //    float T_occ_moy = 0f;
-
-       
-    //    int[] occurences_T = new int[86]; 
-    //    for (int i = 0; i < 86; i++) occurences_T[i] = 0;
-    //    for (int i = 1; i < T.Count; i++)
-    //    {
-    //        if (T[i] <= 86) occurences_T[T[i]]++;
-    //    }
-    //    int occ_max = 0;
-    //    for (int i = 1; i < 86; i++)
-    //    {
-    //        if (occurences_T[i] > occ_max)
-    //        {
-    //            T_occ_max = i;
-    //            occ_max = occurences_T[i];
-    //        }
-    //    }
-    //    // on fait la moyenne du max + son max de voisin pour + de précision
-    //    int voisin = T_occ_max - 1;
-    //    if (occurences_T[T_occ_max + 1] > occurences_T[voisin]) voisin = T_occ_max + 1;
-    //    float div = occurences_T[T_occ_max] + occurences_T[voisin];
-
-    //    if (div == 0) T_occ_moy = 0;
-    //    else T_occ_moy = (float)(T_occ_max * occurences_T[T_occ_max] + (voisin) * occurences_T[voisin]) / div;
-
-    //    // clacul du tempo en BPMs
-    //    tempo = (int)(60f / (T_occ_moy * (1024f / 44100f)));
+        int T_occ_max = 0;
+        float T_occ_moy = 0f;
 
 
+        int[] occurences_T = new int[86];
+        for (int i = 0; i < 86; i++) occurences_T[i] = 0;
+        for (int i = 1; i < T.Count; i++)
+        {
+            if (T[i] <= 86) occurences_T[T[i]]++;
+        }
+        int occ_max = 0;
+        for (int i = 1; i < 86; i++)
+        {
+            if (occurences_T[i] > occ_max)
+            {
+                T_occ_max = i;
+                occ_max = occurences_T[i];
+            }
+        }
+        // on fait la moyenne du max + son max de voisin pour + de précision
+        int voisin = T_occ_max - 1;
+        if (occurences_T[T_occ_max + 1] > occurences_T[voisin]) voisin = T_occ_max + 1;
+        float div = occurences_T[T_occ_max] + occurences_T[voisin];
 
-    //    float[] train_dimp = new float[K_TRAIN_DIMP_SIZE];
-    //    float espace = 0f;
-    //    train_dimp[0] = 1f;
-    //    for (int i = 1; i < K_TRAIN_DIMP_SIZE; i++)
-    //    {
-    //        if (espace >= T_occ_moy)
-    //        {
-    //            train_dimp[i] = 1;
-    //            espace = espace - T_occ_moy; // on garde le depassement
-    //        }
-    //        else train_dimp[i] = 0;
-    //        espace += 1f;
-    //    }
+        if (div == 0) T_occ_moy = 0;
+        else T_occ_moy = (float)(T_occ_max * occurences_T[T_occ_max] + (voisin) * occurences_T[voisin]) / div;
 
-    //    // convolution avec l'énergir instantannée de la music
-    //    for (int i = 0; i < length / 1024 - K_TRAIN_DIMP_SIZE; i++)
-    //    {
-    //        for (int j = 0; j < K_TRAIN_DIMP_SIZE; j++)
-    //        {
-    //            conv[i] = conv[i] + energy1024[i + j] * train_dimp[j];
-    //        }
+        // clacul du tempo en BPMs
+        tempo = (int)(60f / (T_occ_moy * (1024f / 44100f)));
 
-    //    }
-    //   Normalize(ref conv, length / 1024, 1f);
 
-    //    for (int i = 1; i < length / 1024; i++)
-    //        _beat[i] = 0;
 
-    //    float max_conv = 0f;
-    //    int max_conv_pos = 0;
-    //    for (int i = 1; i < length / 1024; i++)
-    //    {
-    //        if (conv[i] > max_conv)
-    //        {
-    //            max_conv = conv[i];
-    //            max_conv_pos = i;
-    //        }
-    //    }
-    //    _beat[max_conv_pos] = 1f;
+        float[] train_dimp = new float[K_TRAIN_DIMP_SIZE];
+        float espace = 0f;
+        train_dimp[0] = 1f;
+        for (int i = 1; i < K_TRAIN_DIMP_SIZE; i++)
+        {
+            if (espace >= T_occ_moy)
+            {
+                train_dimp[i] = 1;
+                espace = espace - T_occ_moy; // on garde le depassement
+            }
+            else train_dimp[i] = 0;
+            espace += 1f;
+        }
 
-    //    // les suivants
-    //    // vers la droite
-    //    int ii = max_conv_pos + T_occ_max;
-    //    while ((ii < length / 1024 - 21) && (conv[ii] > 0f))
-    //    {
-    //        // on cherche un max dans les parages
-    //        int conv_max_pos_loc = Search_max(ref conv, ii, 2, length);
-    //        _beat[conv_max_pos_loc] = 1f;
-    //        ii = conv_max_pos_loc + T_occ_max;
-    //    }
-    //    //// vers la gauche
-    //    ii = max_conv_pos - T_occ_max;
-    //    while (ii > 0)
-    //    {
-    //        // on cherche un max dans les parages
-    //        int conv_max_pos_loc = Search_max(ref conv, ii, 2, length);
-    //        _beat[conv_max_pos_loc] = 1f;
-    //        ii = conv_max_pos_loc - T_occ_max;
-    //    }
+        // convolution avec l'énergir instantannée de la music
+        for (int i = 0; i < length / 1024 - K_TRAIN_DIMP_SIZE; i++)
+        {
+            for (int j = 0; j < K_TRAIN_DIMP_SIZE; j++)
+            {
+                conv[i] = conv[i] + energy1024[i + j] * train_dimp[j];
+            }
+
+        }
+        Normalize(ref conv, length / 1024, 1f);
+
+        for (int i = 1; i < length / 1024; i++)
+            _beat[i] = 0;
+
+        float max_conv = 0f;
+        int max_conv_pos = 0;
+        for (int i = 1; i < length / 1024; i++)
+        {
+            if (conv[i] > max_conv)
+            {
+                max_conv = conv[i];
+                max_conv_pos = i;
+            }
+        }
+        _beat[max_conv_pos] = 1f;
+
+        // les suivants
+        // vers la droite
+        int ii = max_conv_pos + T_occ_max;
+        while ((ii < length / 1024 - 21) && (conv[ii] > 0f))
+        {
+            // on cherche un max dans les parages
+            int conv_max_pos_loc = Search_max(ref conv, ii, 2, length);
+            _beat[conv_max_pos_loc] = 1f;
+            ii = conv_max_pos_loc + T_occ_max;
+        }
+        //// vers la gauche
+        ii = max_conv_pos - T_occ_max;
+        while (ii > 0)
+        {
+            // on cherche un max dans les parages
+            int conv_max_pos_loc = Search_max(ref conv, ii, 2, length);
+            _beat[conv_max_pos_loc] = 1f;
+            ii = conv_max_pos_loc - T_occ_max;
+        }
     }
 }
 
