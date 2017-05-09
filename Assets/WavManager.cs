@@ -6,12 +6,12 @@ using NAudio.Wave;
 public class WavManager : MonoBehaviour
 {
 
-   // WaveFileReader wfr = new WaveFileReader(@"C:\Users\William\Desktop\Unity\Practice\Audio D1\Assets\QHC.wav");
-    Mp3FileReader wfr = new Mp3FileReader(@"C:\Users\William\Desktop\Unity\Practice\Audio D1\Assets\QHC.mp3");/// <summary>
+    WaveFileReader wfr = new WaveFileReader(@"D:\BeaetDetection\Assets\QHC.wav");
+    // Mp3FileReader wfr = new Mp3FileReader(@"C:\Users\William\Desktop\Unity\Practice\Audio D1\Assets\QHC.mp3");/// <summary>
     /// //////////////////////////
     /// </summary>
-   // WaveStream wavStream = WaveFormatConversionStream.CreatePcmStream(rrr);
-   // WaveFileWriter.
+    // WaveStream wavStream = WaveFormatConversionStream.CreatePcmStream(rrr);
+    // WaveFileWriter.
     BeatDetectorTest detector = new BeatDetectorTest();
 
     float[] _data;
@@ -103,10 +103,10 @@ public class WavManager : MonoBehaviour
     {
         for (int i = 1; i < length / 1024 - 108; i++)
         {
-               Debug.DrawLine(new Vector3((i - 1)* interval, _data[i * 1024], 0), new Vector3(i* interval, _data[(i + 1) * 1024],0), Color.blue);
-            Debug.DrawLine(new Vector3((i - 1) * interval, detector.energy_peak[i] * amplitude, 0), new Vector3(i * interval, detector.energy_peak[i + 1] * amplitude, 0), Color.red);
-           // Debug.DrawLine(new Vector3((i - 1) * interval, detector.conv[i - 1] * amplitude, 0), new Vector3(i * interval, detector.conv[i] * amplitude, 0), Color.blue);
-         //   Debug.DrawLine(new Vector3((i - 1) * interval, detector._beat[i] * amplitude, 0), new Vector3(i * interval, detector._beat[i + 1] * amplitude, 0), Color.black);
+            //Debug.DrawLine(new Vector3((i - 1) * interval, _data[i * 1024], 0), new Vector3(i * interval, _data[(i + 1) * 1024], 0), Color.blue);
+            //Debug.DrawLine(new Vector3((i - 1) * interval, detector.energy_peak[i] * amplitude, 0), new Vector3(i * interval, detector.energy_peak[i + 1] * amplitude, 0), Color.red);
+            Debug.DrawLine(new Vector3((i - 1) * interval, detector.conv[i - 1] * amplitude, 0), new Vector3(i * interval, detector.conv[i] * amplitude, 0), Color.blue);
+            Debug.DrawLine(new Vector3((i - 1) * interval, detector._beat[i] * amplitude, 0), new Vector3(i * interval, detector._beat[i + 1] * amplitude, 0), Color.black);
         }
 
 

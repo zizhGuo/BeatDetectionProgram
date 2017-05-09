@@ -33,23 +33,10 @@ public class BeatDetectorTest
         }
     }
 
-    // //public bool KeepOn = true;
-    // public static BeatDetectorTest Instance
-    // {
-    //     get
-    //     {
-    //         return _instance;
-    //     }
-    // }
-    // private BeatDetectorTest()
-    // {
-
-    // }
-
-    public void WavReader(Mp3FileReader wfr)/////////////////////////////////
+    public void WavReader(WaveFileReader wfr)/////////////////////////////////
     {
         Debug.Log("Read Start");
-        length = (int)wfr.Length;/////////////////////////////////////
+        length = (int)wfr.SampleCount;/////////////////////////////////////
        
         switch (length % 4)
         {
@@ -69,10 +56,10 @@ public class BeatDetectorTest
         //float readf = 0;
         read = wfr.Read(buffer, 0, length);
         //readf = read;
-        //for (int i = 0; i < read; i += 2)/////////////////////////
-        //{
-        //    realData[i]=(BitConverter.ToInt16(buffer, i));
-        //}
+        for (int i = 0; i < read; i += 2)/////////////////////////
+        {
+            realData[i] = (BitConverter.ToInt16(buffer, i));
+        }
 
         //for (int i = 0; i < read / 4; i++)
         //{
